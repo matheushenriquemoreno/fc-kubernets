@@ -1,0 +1,10 @@
+-- Cria um cluster Kubernetes 
+kind create cluster --config=k8s/kind.yaml --name=teste
+
+
+-- acessar o cluster
+kubectl cluster-info --context kind-teste
+
+
+-- listas os cluster existestes
+kubectl config get-clusters
