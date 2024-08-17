@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: "goserser"
+  labels:
+    app: "goserser"
+spec:
+  containers:
+    - name: goserver
+      image: "matheushenrique35/helloworldgo:latest"

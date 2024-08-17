@@ -1,10 +1,33 @@
 -- Cria um cluster Kubernetes 
 kind create cluster --config=k8s/kind.yaml --name=teste
 
-
 -- acessar o cluster
 kubectl cluster-info --context kind-teste
 
-
 -- listas os cluster existestes
 kubectl config get-clusters
+
+-- exclui um cluster
+kind delete clusters <name-cluster>
+
+-- Criando o primeiro pod
+kubectl apply -f k8s/pod.yaml
+
+-- verificando pods existentes
+kubectl get pods
+
+-- Criando um redirecionamento de porta com base em um pod criado
+kubectl port-forward pod/goserver 7070:80
+
+-- Delete um pod
+kubectl delete pod goserver
+
+
+-- aplicando o ReplicaSet
+kubectl apply -f k8s/replicaset.yaml
+
+OBS sobre ReplicaSet:
+Mesmo alterando a versão da imagem no arquivo yaml e executando novamente o aplly, 
+o kubernets so atualiza os containers com a nova versão quando eu paro o pod e atualizo novamente (Mato o processo e crio novamente).
+
+
