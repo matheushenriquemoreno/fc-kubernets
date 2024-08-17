@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: goserver-service
+spec:
+  selector:
+    app: goserver
+#  type: LoadBalancer
+  type: ClusterIP
+#  type: NodePort
+  ports:
+    - name: goserver-portservice
+      port: 80 # porta do service
+      targetPort: 8000 # porta do container que e exportada na aplicacao-imagem
+      protocol: TCP

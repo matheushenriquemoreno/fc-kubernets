@@ -22,12 +22,61 @@ kubectl port-forward pod/goserver 7070:80
 -- Delete um pod
 kubectl delete pod goserver
 
-
 -- aplicando o ReplicaSet
 kubectl apply -f k8s/replicaset.yaml
+
+
+-- buscando os replicasets existentes
+kubectl get replicasets
+
+-- excluindo um replicaset
+kubectl delete replicaset goserver
+
 
 OBS sobre ReplicaSet:
 Mesmo alterando a versão da imagem no arquivo yaml e executando novamente o aplly, 
 o kubernets so atualiza os containers com a nova versão quando eu paro o pod e atualizo novamente (Mato o processo e crio novamente).
 
 
+Hierarquia de grandesa do kubernets
+-  Deployment -> ReplicaSet -> Pod
+
+
+-- Aplicar o deployment
+kubectl apply -f k8s/deployment.yaml
+
+
+-- verificar informações de um pod especifico
+kubectl describe pod goserver-66bbbb7c54-2t7l6
+
+
+-- Rollout e Revisões
+
+-- lista as versoes de um deployment
+kubectl rollout history deployment goserver
+
+-- volta para a ultima versão 
+kubectl rollout undo deployment goserver
+
+-- volta para a revisão especificada 
+kubectl rollout undo deployment goserver --to-revision=1
+
+Services
+
+-- Aplicando um service
+kubectl apply -f k8s/service.yaml
+
+-- verificado os services existentes
+kubectl get services
+
+-- mapeando uma porta local para o service
+kubectl port-forward svc/goserver-service 7070:80
+
+
+Utilizando proxy para acessar api do Kubernets
+
+-- mapeando a api do kubernets para a porta 8087 para poder acessar
+ kubectl proxy --port=8087
+
+// acessando o service criado pela porta exportada
+http://localhost:8087/api/v1/namespaces/default/services/goserver-service

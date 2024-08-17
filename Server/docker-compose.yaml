@@ -5,6 +5,9 @@ services:
     build: .
     image: goserverimage
     container_name: goserver
+    environment:
+      - NAME=Matheus
+      - AGE=21
     ports:
-      - 7070:80
+      - 7070:8000
 
