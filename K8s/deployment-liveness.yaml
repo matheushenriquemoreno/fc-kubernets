@@ -17,14 +17,15 @@ spec:
     spec:
       containers:
       - name: goserver
-        image: matheushenrique35/helloworldgo:v8.4
-        readinessProbe: # config para aguardar meu container estiver pronto para enviar trafego de rede
+        image: matheushenrique35/helloworldgo:v8.3
+        livenessProbe:
           httpGet:
             path: /healthz
-            port: 8000
-          periodSeconds: 3
-          failureThreshold: 1
-          initialDelaySeconds: 10
+            port: 8000 # a porta e a exporta pela minha imagem/codigo do container não do service
+          periodSeconds: 5
+          failureThreshold: 3 # quantidade de requisicoes enviada para dar erro e reinicar a aplicacao 
+          timeoutSeconds: 1 # espera ate 2 segundo para executar a requisicao
+          successThreshold: 1
 
         envFrom:
           - configMapRef:

@@ -5,13 +5,17 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
+
+var startedat = time.Now()
 
 func main() {
 	fmt.Println("Servidor rodando na porta 80.")
 	http.HandleFunc("/", Hello)
 	http.HandleFunc("/ConfigMap", ConfigMap)
 	http.HandleFunc("/Secret", Secret)
+	http.HandleFunc("/healthz", Healthz)
 	http.ListenAndServe(":8000", nil)
 }
 
@@ -20,7 +24,6 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 	name := os.Getenv("NAME")
 	age := os.Getenv("AGE")
 	fmt.Fprintf(w, "Ola, I'm %s. I'm %s", name, age)
-	//w.Write([]byte("<h1> ola Mundo FullCycle!!!!"))
 }
 
 func ConfigMap(w http.ResponseWriter, r *http.Request) {
@@ -37,4 +40,16 @@ func Secret(w http.ResponseWriter, r *http.Request) {
 	user := os.Getenv("USER")
 	password := os.Getenv("PASSOWRD")
 	fmt.Fprintf(w, "user: %s. password: %s", user, password)
+}
+
+func Healthz(w http.ResponseWriter, r *http.Request) {
+	duration := time.Since(startedat)
+
+	if duration.Seconds() < 10 {
+		w.WriteHeader(500)
+		w.Write([]byte(fmt.Sprintf("Duration: %v", duration.Seconds())))
+	} else {
+		w.WriteHeader(200)
+		w.Write([]byte("ok"))
+	}
 }

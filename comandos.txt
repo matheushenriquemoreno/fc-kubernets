@@ -92,12 +92,13 @@ kubectl apply -f k8s/configmap-env.yaml
 -- apos aplicar tem que realizar o deployment novamente
 kubectl apply -f k8s/deployment.yaml
 
-
-
-
-
 -- Acessar o conteiner dentro de um Pod
 kubectl exec -it <namepod> -- bash
 
 -- acessar os logs de um pod
 kubectl logs <namepod>
+
+
+
+
+
