@@ -7,7 +7,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: goserver
+      app: goserver # nome do pods do deployment
   replicas: 2
   template:
     metadata:
@@ -17,9 +17,32 @@ spec:
     spec:
       containers:
       - name: goserver
-        image: "matheushenrique35/helloworldgo:v6"
-        env: 
-          - name: NAME
-            value: "Matheus"
-          - name: AGE
-            value: "21"
+        image: matheushenrique35/helloworldgo:v8.1
+        envFrom:
+          - configMapRef:
+              name: goserver-enviroment # mapeia automaticamente os as chaves existentes no arquivo de configuracao
+        volumeMounts:
+          - mountPath: /go/myfamily
+            name: config
+            readOnly: true
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            memory: 256Mi
+        # env: 
+        #   - name: NAME
+        #     valueFrom:
+        #       configMapKeyRef:
+        #         name: goserver-env
+        #         key: name
+          # - name: AGE
+          #   value: '88'
+
+      volumes:
+        - name: config
+          configMap:
+            name: configmap-family
+            items:
+            - key: members
+              path: family.txt

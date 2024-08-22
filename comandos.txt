@@ -39,9 +39,12 @@ o kubernets so atualiza os containers com a nova versão quando eu paro o pod e 
 
 
 Hierarquia de grandesa do kubernets
--  Deployment -> ReplicaSet -> Pod
+- Deployment -> ReplicaSet -> Pod
 
 
+Deployment e a versão acima do ReplicaSet, que ja traz a abstração de matar os pods e iniciar novamente
+trazendo vantagens de atualização de ambiente com quase nenhuma indisponibilidade.
+ 
 -- Aplicar o deployment
 kubectl apply -f k8s/deployment.yaml
 
@@ -72,7 +75,6 @@ kubectl get services
 -- mapeando uma porta local para o service
 kubectl port-forward svc/goserver-service 7070:80
 
-
 Utilizando proxy para acessar api do Kubernets
 
 -- mapeando a api do kubernets para a porta 8087 para poder acessar
@@ -80,3 +82,22 @@ Utilizando proxy para acessar api do Kubernets
 
 // acessando o service criado pela porta exportada
 http://localhost:8087/api/v1/namespaces/default/services/goserver-service
+
+
+Utilizando um arquivo para configuração das variaveis de ambiente - ConfigMap
+
+-- Aplicando a configuração 
+kubectl apply -f k8s/configmap-env.yaml
+
+-- apos aplicar tem que realizar o deployment novamente
+kubectl apply -f k8s/deployment.yaml
+
+
+
+
+
+-- Acessar o conteiner dentro de um Pod
+kubectl exec -it <namepod> -- bash
+
+-- acessar os logs de um pod
+kubectl logs <namepod>
