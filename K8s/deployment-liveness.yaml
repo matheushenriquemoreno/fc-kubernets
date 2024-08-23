@@ -18,7 +18,7 @@ spec:
       containers:
       - name: goserver
         image: matheushenrique35/helloworldgo:v8.3
-        livenessProbe:
+        livenessProbe: # Utilizado para verificar a saude do container em caso de erro ele reinicia 
           httpGet:
             path: /healthz
             port: 8000 # a porta e a exporta pela minha imagem/codigo do container não do service
@@ -34,20 +34,6 @@ spec:
           - mountPath: /go/myfamily
             name: config
             readOnly: true
-        resources:
-          limits:
-            memory: 512Mi
-          requests:
-            memory: 256Mi
-        # env: 
-        #   - name: NAME
-        #     valueFrom:
-        #       configMapKeyRef:
-        #         name: goserver-env
-        #         key: name
-          # - name: AGE
-          #   value: '88'
-
       volumes:
         - name: config
           configMap:

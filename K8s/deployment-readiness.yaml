@@ -33,20 +33,6 @@ spec:
           - mountPath: /go/myfamily
             name: config
             readOnly: true
-        resources:
-          limits:
-            memory: 512Mi
-          requests:
-            memory: 256Mi
-        # env: 
-        #   - name: NAME
-        #     valueFrom:
-        #       configMapKeyRef:
-        #         name: goserver-env
-        #         key: name
-          # - name: AGE
-          #   value: '88'
-
       volumes:
         - name: config
           configMap:

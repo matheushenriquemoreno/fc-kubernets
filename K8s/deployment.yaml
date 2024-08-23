@@ -18,13 +18,29 @@ spec:
       containers:
       - name: goserver
         image: matheushenrique35/helloworldgo:v8.4
-        readinessProbe: # config para aguardar meu container estiver pronto para enviar trafego de rede
+
+        startupProbe: # funciona como se fosse o rediness porém somente no processo de inicialização, após ele ser liberado o readiness e o liveness e acionado, evitando assim erros de execução quando minha aplicação demorar a executar
+          httpGet:
+            path: /healthz
+            port: 8000
+          periodSeconds: 3
+          failureThreshold: 10
+          initialDelaySeconds: 1
+
+        readinessProbe:
           httpGet:
             path: /healthz
             port: 8000
           periodSeconds: 3
           failureThreshold: 1
-          initialDelaySeconds: 10
+
+        livenessProbe: 
+          httpGet:
+            path: /healthz
+            port: 8000 
+          periodSeconds: 5
+          failureThreshold: 3  
+          timeoutSeconds: 1 
 
         envFrom:
           - configMapRef:
