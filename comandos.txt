@@ -99,6 +99,25 @@ kubectl exec -it <namepod> -- bash
 kubectl logs <namepod>
 
 
+Metrics-Server
+
+link arquivo config: https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+docs: https://github.com/kubernetes-sigs/metrics-server
+
+kubectl apply -f k8s/metrics-server.yaml
+
+-- verificar o quanto de recurso que um pod tem
+kubectl top pod goserver-669f6d864d-fw8ht
 
 
+HPA
+-- aplicando a configuração do HPA
+kubectl apply -f k8s/hpa.yaml
 
+
+kubectl get hpa
+
+
+Teste extress com Fortio
+
+kubectl run -it fortio --rm --image=fortio/fortio -- load -qps 800 -t 120s -c 100 "http://goserver-service/healthz"

@@ -44,7 +44,9 @@ func Secret(w http.ResponseWriter, r *http.Request) {
 
 func Healthz(w http.ResponseWriter, r *http.Request) {
 	duration := time.Since(startedat)
-
+	// logica adicionada para simular o caso de uma aplicação que demoraria
+	// 10 segundos para estár disponivel,
+	// configuração do kubbernets que verifica a saude da aplicação = Probes : startup, liveness, readiness
 	if duration.Seconds() < 10 {
 		w.WriteHeader(500)
 		w.Write([]byte(fmt.Sprintf("Duration: %v", duration.Seconds())))

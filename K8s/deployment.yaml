@@ -8,7 +8,7 @@ spec:
   selector:
     matchLabels:
       app: goserver # nome do pods do deployment
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       name: "goserver"
@@ -18,6 +18,14 @@ spec:
       containers:
       - name: goserver
         image: matheushenrique35/helloworldgo:v8.4
+        
+        resources:
+          requests: # o minimo que uma aplicação precisa, e automaticamente esses recursos e alocado no POD.
+            cpu: 10m
+            memory: 20Mi
+          limits: # limite de recursos que cada pod pode alocar
+            cpu: 20m # evitar que a soma de pods criados ultrapasse o valor total de recurso de CPU disponivel
+            memory: 25Mi
 
         startupProbe: # funciona como se fosse o rediness porém somente no processo de inicialização, após ele ser liberado o readiness e o liveness e acionado, evitando assim erros de execução quando minha aplicação demorar a executar
           httpGet:
@@ -49,11 +57,6 @@ spec:
           - mountPath: /go/myfamily
             name: config
             readOnly: true
-        resources:
-          limits:
-            memory: 512Mi
-          requests:
-            memory: 256Mi
         # env: 
         #   - name: NAME
         #     valueFrom:
