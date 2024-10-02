@@ -8,7 +8,7 @@ spec:
   selector:
     matchLabels:
       app: goserver # nome do pods do deployment
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       name: "goserver"
@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
       - name: goserver
-        image: matheushenrique35/helloworldgo:v8.3
+        image: matheushenrique35/helloworldgo:v8.4
+        
         resources:
           requests: # o minimo que uma aplicação precisa, e automaticamente esses recursos e alocado no POD.
             cpu: 10m
@@ -26,14 +27,28 @@ spec:
             cpu: 20m # evitar que a soma de pods criados ultrapasse o valor total de recurso de CPU disponivel
             memory: 25Mi
 
-        livenessProbe: # Utilizado para verificar a saude do container em caso de erro ele reinicia 
+        startupProbe: # funciona como se fosse o rediness porém somente no processo de inicialização, após ele ser liberado o readiness e o liveness e acionado, evitando assim erros de execução quando minha aplicação demorar a executar
           httpGet:
             path: /healthz
-            port: 8000 # a porta e a exporta pela minha imagem/codigo do container, não do service.
+            port: 8000
+          periodSeconds: 3
+          failureThreshold: 10
+          initialDelaySeconds: 1
+
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8000
+          periodSeconds: 3
+          failureThreshold: 1
+
+        livenessProbe: 
+          httpGet:
+            path: /healthz
+            port: 8000 
           periodSeconds: 5
-          failureThreshold: 3 # quantidade de requisicoes enviada para dar erro e reinicar a aplicacao 
-          timeoutSeconds: 2 # espera ate 2 segundo para a resposta da requisicao, em caso demorar de mais de 2 segundos ja e registrado uma falha
-          successThreshold: 1
+          failureThreshold: 3  
+          timeoutSeconds: 1 
 
         envFrom:
           - configMapRef:
@@ -42,6 +57,15 @@ spec:
           - mountPath: /go/myfamily
             name: config
             readOnly: true
+        # env: 
+        #   - name: NAME
+        #     valueFrom:
+        #       configMapKeyRef:
+        #         name: goserver-env
+        #         key: name
+          # - name: AGE
+          #   value: '88'
+
       volumes:
         - name: config
           configMap:

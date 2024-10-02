@@ -1,0 +1,12 @@
+
+-- cria o volume dinamico
+kubectl apply -f k8s/volumes/pvc.yaml
+
+-- obtem as storage class existentens no meu cluster
+kubectl get storageclass
+
+-- obtendo os volumes
+kubectl get pvc
+
+-- verificando o volume criado dentro do container
+kubectl exec -it goserver-b6d6c6f6b-stglz -- bash

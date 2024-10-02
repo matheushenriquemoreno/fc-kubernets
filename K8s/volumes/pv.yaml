@@ -1,0 +1,11 @@
+# https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv1
+spec:
+  capacity:
+    storage: 50G1
+  accessModes:
+    - ReadWriteOnce # permissão que deixa gravar e ler dados caso os pods que iram utilizar o volume esteja no mesmo NODE

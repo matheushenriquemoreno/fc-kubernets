@@ -27,29 +27,6 @@ spec:
             cpu: 20m # evitar que a soma de pods criados ultrapasse o valor total de recurso de CPU disponivel
             memory: 25Mi
 
-        startupProbe: # funciona como se fosse o rediness porém somente no processo de inicialização, após ele ser liberado o readiness e o liveness e acionado, evitando assim erros de execução quando minha aplicação demorar a executar
-          httpGet:
-            path: /healthz
-            port: 8000
-          periodSeconds: 3
-          failureThreshold: 10
-          initialDelaySeconds: 1
-
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 8000
-          periodSeconds: 3
-          failureThreshold: 1
-
-        livenessProbe: 
-          httpGet:
-            path: /healthz
-            port: 8000 
-          periodSeconds: 5
-          failureThreshold: 3  
-          timeoutSeconds: 1 
-
         envFrom:
           - configMapRef:
               name: goserver-enviroment # mapeia automaticamente os as chaves existentes no arquivo de configuracao
@@ -57,6 +34,9 @@ spec:
           - mountPath: /go/myfamily
             name: config
             readOnly: true
+          - mountPath: "/go/pvc"
+            name: goserver-volume
+            
         # env: 
         #   - name: NAME
         #     valueFrom:
@@ -67,6 +47,9 @@ spec:
           #   value: '88'
 
       volumes:
+        - name: goserver-volume
+          persistentVolumeClaim:
+            claimName: goserver-pvc
         - name: config
           configMap:
             name: configmap-family

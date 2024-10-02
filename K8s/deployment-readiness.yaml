@@ -18,13 +18,22 @@ spec:
       containers:
       - name: goserver
         image: matheushenrique35/helloworldgo:v8.4
-        readinessProbe: # config para aguardar meu container estiver pronto para enviar trafego de rede
+
+        resources:
+          requests: # o minimo que uma aplicação precisa, e automaticamente esses recursos e alocado no POD.
+            cpu: 10m
+            memory: 20Mi
+          limits: # limite de recursos que cada pod pode alocar
+            cpu: 20m # evitar que a soma de pods criados ultrapasse o valor total de recurso de CPU disponivel
+            memory: 25Mi
+
+        readinessProbe: # faz exatamente a mesma coisa que o livennes, porém em caso de erro ele não faz o envio de trafego de rede, quando a verificação der sucesso, começa a enviar trafego.
           httpGet:
             path: /healthz
             port: 8000
           periodSeconds: 3
           failureThreshold: 1
-          initialDelaySeconds: 10
+          initialDelaySeconds: 10 # configura um delay para iniciar as verificações do readiness, enquanto isso o container não fica disponivel. 
 
         envFrom:
           - configMapRef:

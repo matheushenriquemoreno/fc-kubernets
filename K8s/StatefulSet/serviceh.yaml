@@ -1,0 +1,12 @@
+# Headless service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-statefulset
+spec:
+  selector:
+    app: mysql 
+  ports:
+    - port: 3306 # porta do service
+  clusterIP: None
