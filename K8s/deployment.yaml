@@ -43,8 +43,8 @@ spec:
         #       configMapKeyRef:
         #         name: goserver-env
         #         key: name
-          # - name: AGE
-          #   value: '88'
+        #   - name: AGE
+        #     value: '88'
 
       volumes:
         - name: goserver-volume

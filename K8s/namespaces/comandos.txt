@@ -1,0 +1,36 @@
+
+kubectl create ns dev
+
+kubectl apply -f deployment.yaml -n=dev
+
+kubectl get pods -n dev
+
+
+-- verifica o contexto atual
+kubectl config current-context
+
+
+-- comando para verificar as configuraçoes do  meu cluster.
+kubectl config view 
+
+
+-- Criando novos contexto para melhor separar os recursos utilizados e configurações, 
+-- evitando assim configurar um item em algum contexto que não poderia, por exemplo aplicar algo de piloto em produção;
+
+kubectl config set-context dev --namespace=dev --cluster=kind-teste --user=kind-teste
+
+kubectl config set-context prod --namespace=prod --cluster=kind-teste --user=kind-teste
+
+-- setando contexto expecifico: 
+kubectl config use-context dev
+
+kubectl config use-context prod
+
+
+
+
+--- Service Accounts 
+
+
+-- obtendo os services criados
+kubectl get serviceAccounts
