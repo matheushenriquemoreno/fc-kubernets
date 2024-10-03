@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginxpod # selector do pod
+  template: # o template e da criação do pod
+    metadata:
+      labels:
+        app: nginxpod
+    spec:
+      containers:
+      - name: contanernginx
+        image: wesleywillians/nginx-imersao13
+        #image: nginx
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80

@@ -6,7 +6,7 @@ spec:
   selector:
     app: goserver # e responsavel por filtrar todos os pods que estão incorporado nesse servico
 #  type: LoadBalancer
-  type: ClusterIP
+  type: ClusterIP # utilizando quando se tem um ingress visando redução de custos no kubernetes
 #  type: NodePort
   ports:
     - name: goserver-portservice
